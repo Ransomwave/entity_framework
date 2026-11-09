@@ -40,5 +40,13 @@ var foundAnimal = animalService.CercaPerXip("000000000000001");
 Console.WriteLine($"Found animal: {foundAnimal?.Nom} ({foundAnimal?.Xip.Codi})");
 
 // won't find anything
-var notFoundAnimal = animalService.CercaPerXip("000000000006767");
-Console.WriteLine($"Found animal: {notFoundAnimal?.Nom} ({notFoundAnimal?.Xip.Codi})");
+animalService.CercaPerXip("000000000006767");
+
+// extra
+animalService.CercaPerXip("67");
+animalService.CercaPerXip("sixseven67");
+
+var foundByName = animalService.CercaPerNom("mich");
+foreach (var animal in foundByName) {
+    Console.WriteLine($"Found by name: {animal.Nom} ({animal.Xip.Codi})");
+}
