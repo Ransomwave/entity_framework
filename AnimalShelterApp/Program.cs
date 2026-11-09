@@ -1,5 +1,6 @@
 ﻿using AnimalShelterApp.Data;
 using AnimalShelterApp.Models;
+using AnimalShelterApp.Services;
 
 using var ctx = new ShelterContext();
 ctx.Database.EnsureDeleted();
@@ -24,3 +25,20 @@ Console.WriteLine("=== ANIMALS ===");
 foreach (var animal in ctx.Animals.ToList()) {
     Console.WriteLine($"{animal.Nom} ({animal.Especie}) Xip: {animal.Xip.Codi}");
 }
+
+// AnimalService tests
+Console.WriteLine("=== AnimalService ===");
+var animalService = new AnimalService(ctx);
+
+var availableDogs = animalService.GetDisponibles(Especie.GOS);
+foreach (var dog in availableDogs) {
+    Console.WriteLine($"Available dog: {dog.Nom} ({dog.Xip.Codi})");
+}
+
+// will find first
+var foundAnimal = animalService.CercaPerXip("000000000000001");
+Console.WriteLine($"Found animal: {foundAnimal?.Nom} ({foundAnimal?.Xip.Codi})");
+
+// won't find anything
+var notFoundAnimal = animalService.CercaPerXip("000000000006767");
+Console.WriteLine($"Found animal: {notFoundAnimal?.Nom} ({notFoundAnimal?.Xip.Codi})");
