@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AnimalShelterApp.Models;
 
-[Index(nameof(XipId), IsUnique = true)]
 public class Animal {
     public int AnimalId { get; set; }
 
