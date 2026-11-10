@@ -10,7 +10,11 @@ public class Xip {
     [StringLength(15, MinimumLength = 15)]
     public string Codi { get; set; } = "";
 
-    public DateTime DataImplantacio { get; set; } = DateTime.UtcNow;
+    public DateTime DataImplantacio { get; set; }
 
     public virtual Animal Animal { get; set; } = null!; // <- "null!" means that we tell the compiler the value will be initialized at runtime
+
+    public Xip() {
+        DataImplantacio = DateTime.UtcNow;
+    }
 }

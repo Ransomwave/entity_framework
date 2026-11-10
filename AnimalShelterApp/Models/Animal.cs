@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore;
 namespace AnimalShelterApp.Models;
 
 public class Animal {
+
     public int AnimalId { get; set; }
 
     [MaxLength(50)]
-    public string Nom { get; set; } = "";
+    public string Nom { get; set; }
 
     public Especie Especie { get; set; }
 
@@ -15,7 +16,7 @@ public class Animal {
 
     public DateTime DataNaixement { get; set; }
 
-    public DateTime DataEntrada { get; set; } = DateTime.UtcNow;
+    public DateTime DataEntrada { get; set; }
 
     [Range(0.1, 100)]
     public double Pes { get; set; }
@@ -28,4 +29,11 @@ public class Animal {
     public decimal QuotaAdopcio { get; set; }
 
     public virtual required Xip Xip { get; set; }
+
+    public Animal() {
+        Nom = "";
+        DataNaixement = DateTime.UtcNow;
+        EstaAdoptat = false;
+        QuotaAdopcio = 0;
+    }
 }
