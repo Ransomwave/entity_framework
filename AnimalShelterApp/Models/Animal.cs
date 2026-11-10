@@ -8,7 +8,7 @@ public class Animal {
     public int AnimalId { get; set; }
 
     [MaxLength(50)]
-    public string Nom { get; set; }
+    public required string Nom { get; set; }
 
     public Especie Especie { get; set; }
 
@@ -30,8 +30,9 @@ public class Animal {
 
     public virtual required Xip Xip { get; set; }
 
+    public virtual Adoptant? Adoptant { get; set; }
+
     public Animal() {
-        Nom = "";
         DataNaixement = DateTime.UtcNow;
         EstaAdoptat = false;
         QuotaAdopcio = 0;

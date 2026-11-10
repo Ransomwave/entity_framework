@@ -1,4 +1,5 @@
-﻿using AnimalShelterApp.Data;
+﻿using System.Diagnostics;
+using AnimalShelterApp.Data;
 using AnimalShelterApp.Models;
 using AnimalShelterApp.Services;
 
@@ -50,3 +51,45 @@ var foundByName = animalService.CercaPerNom("mich");
 foreach (var animal in foundByName) {
     Console.WriteLine($"Found by name: {animal.Nom} ({animal.Xip.Codi})");
 }
+
+// === PART 2 ===
+Debug.WriteLine("=== PART 2 ===");
+var adoptantService = new AdoptantService(ctx);
+
+// assuming it wants a hardcoded adopted animal
+var dogToAdopt = availableDogs[0];
+dogToAdopt.EstaAdoptat = true;
+dogToAdopt.DataAdopcio = DateTime.UtcNow;
+
+var adoptants = new List<Adoptant> {
+    new() { DNI = "12345678Z", Nom = "Marta", Cognoms = "Puig Soler", TeJardi = true, Animals = [dogToAdopt] },
+    new() { DNI = "87654321X", Nom = "Pau", Cognoms = "Ferrer Vidal", TeJardi = false },
+};
+
+var marta = adoptants[0];
+var pau = adoptants[1];
+
+ctx.Adoptants.AddRange(adoptants);
+ctx.SaveChanges();
+
+
+adoptantService.Adoptar(marta.DNI, availableDogs[1].Xip.Codi);
+
+// errors
+adoptantService.Adoptar(pau.DNI, availableDogs[2].Xip.Codi); // doesn't have yard
+adoptantService.Adoptar("67676767A", availableDogs[2].Xip.Codi); // adptant doesn't exist
+adoptantService.Adoptar(marta.DNI, "676767676767"); // animal doesn't exist
+
+// extra (2)
+adoptantService.Adoptar(marta.DNI, "000000000000005");
+adoptantService.Adoptar(marta.DNI, "000000000000006"); // fails, max animals per person is 3!
+
+adoptantService.Retornar("000000000000005");
+adoptantService.Retornar("000000000000005"); // trying again will fail (not adopted)
+
+foreach (var animal in marta.Animals) {
+    Debug.WriteLine($"Animal Marta: {animal.Xip.Codi}");
+}
+
+// extra (3)
+adoptantService.LlistaAdoptants(1);
