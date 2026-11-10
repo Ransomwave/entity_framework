@@ -13,8 +13,11 @@ public class ShelterContext : DbContext {
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<Animal>()
             .HasOne(animal => animal.Xip)
-            .WithOne()
-            .HasForeignKey<Animal>(animal => animal.XipId)
-            .IsRequired();
+            .WithOne(xip => xip.Animal)
+            .HasForeignKey<Animal>("XipId")
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
+
+
     }
 }

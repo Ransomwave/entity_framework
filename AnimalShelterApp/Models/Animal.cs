@@ -27,6 +27,5 @@ public class Animal {
     [Precision(8, 2)]
     public decimal QuotaAdopcio { get; set; }
 
-    public int XipId { get; set; }
-    public virtual Xip Xip { get; set; } = null!; // <- "null!" means that we tell the compiler the value will be initialized at runtime
+    public virtual required Xip Xip { get; set; }
 }
