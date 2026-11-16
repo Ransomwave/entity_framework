@@ -26,6 +26,12 @@ public class ShelterContext : DbContext {
             .HasForeignKey("AdoptantId")
             .IsRequired(false);
 
+        modelBuilder.Entity<Animal>()
+            .HasOne(animal => animal.Mare)
+            .WithMany(animal => animal.Cries)
+            .HasForeignKey("MareId")
+            .IsRequired(false);
+
         modelBuilder.Entity<Voluntari>()
             .HasMany(voluntari => voluntari.Animals)
             .WithMany(animal => animal.Voluntaris)

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 
 namespace AnimalShelterApp.Models;
@@ -32,12 +33,23 @@ public class Animal {
 
     public virtual Adoptant? Adoptant { get; set; }
 
-    public virtual ICollection<Voluntari> Voluntaris { get; set; }
+    public virtual HashSet<Voluntari> Voluntaris { get; set; }
+
+    public virtual Animal? Mare { get; set; }
+
+    public virtual HashSet<Animal> Cries { get; set; }
 
     public Animal() {
-        Voluntaris = new HashSet<Voluntari>();
+        Voluntaris = [];
+        Cries = [];
         DataNaixement = DateTime.UtcNow;
         EstaAdoptat = false;
         QuotaAdopcio = 0;
     }
+
+    public override string ToString() {
+        return $"AnimalId: {AnimalId}, Nom: {Nom}, Especie: {Especie}, EsFemella: {EsFemella}, Pes: {Pes}, DataNaixement: {DataNaixement}, DataEntrada: {DataEntrada}, EstaAdoptat: {EstaAdoptat}, DataAdopcio: {DataAdopcio}, QuotaAdopcio: {QuotaAdopcio}, Xip: {Xip.Codi}";
+    }
+
+
 }
