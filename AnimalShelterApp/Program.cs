@@ -93,3 +93,57 @@ foreach (var animal in marta.Animals) {
 
 // extra (3)
 adoptantService.LlistaAdoptants(1);
+
+// === PART 3 ===
+Debug.WriteLine("=== PART 3 ===");
+var baz = ctx.Animals.First(animal => animal.Xip.Codi == "000000000000003");
+var qux = ctx.Animals.First(animal => animal.Xip.Codi == "000000000000004");
+var kira = ctx.Animals.First(animal => animal.Xip.Codi == "000000000000006");
+
+var voluntaris = new List<Voluntari> {
+    new() { Nom = "Aina", Torn = Torn.MATI, Animals = [baz, qux] },
+    new() { Nom = "Joan", Torn = Torn.TARDA, Animals = [kira] },
+    new() { Nom = "Nuria", Torn = Torn.CAP_DE_SETMANA },
+};
+
+ctx.Voluntaris.AddRange(voluntaris);
+ctx.SaveChanges();
+
+var voluntariService = new VoluntariService(ctx);
+
+void PrintVoluntaris() {
+    foreach (var voluntari in voluntariService.GetTots()) {
+        Debug.WriteLine(voluntari);
+        foreach (var animal in voluntari.Animals) {
+            Debug.WriteLine($"   {animal.Nom} ({animal.Xip.Codi})");
+        }
+    }
+}
+
+PrintVoluntaris();
+
+voluntariService.AssignarAnimal("Nuria", "000000000000005");
+voluntariService.AssignarAnimal("Pere", "000000000000005"); // voluntari doesn't exist
+voluntariService.AssignarAnimal("Aina", "000000000000999"); // animal doesn't exist
+voluntariService.AssignarAnimal("Aina", "000000000000001"); // animal is adopted
+voluntariService.AssignarAnimal("Aina", "000000000000003"); // already assigned
+voluntariService.AssignarAnimal("Aina", "000000000000007");
+voluntariService.AssignarAnimal("Aina", "000000000000009");
+voluntariService.AssignarAnimal("Aina", "000000000000006"); // fails, max animals per voluntari is 4!
+
+voluntariService.DesassignarAnimal("Aina", "000000000000009");
+voluntariService.DesassignarAnimal("Pere", "000000000000009"); // voluntari doesn't exist
+voluntariService.DesassignarAnimal("Aina", "000000000000999"); // animal doesn't exist
+voluntariService.DesassignarAnimal("Nuria", "000000000000003"); // not assigned
+
+// adopting clears the animal's voluntaris
+adoptantService.Adoptar(marta.DNI, "000000000000003");
+Debug.WriteLine($"Voluntaris of Baz: {baz.Voluntaris.Count}");
+PrintVoluntaris();
+
+voluntariService.RegistrarPasseig("Aina", "000000000000004", 30);
+voluntariService.RegistrarPasseig("Aina", "000000000000004", 45); // minutes accumulate
+voluntariService.RegistrarPasseig("Joan", "000000000000006", 20); // not a dog
+voluntariService.RegistrarPasseig("Nuria", "000000000000004", 20); // not assigned
+
+PrintVoluntaris();

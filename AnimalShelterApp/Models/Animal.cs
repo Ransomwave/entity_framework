@@ -32,7 +32,10 @@ public class Animal {
 
     public virtual Adoptant? Adoptant { get; set; }
 
+    public virtual ICollection<Voluntari> Voluntaris { get; set; }
+
     public Animal() {
+        Voluntaris = new HashSet<Voluntari>();
         DataNaixement = DateTime.UtcNow;
         EstaAdoptat = false;
         QuotaAdopcio = 0;

@@ -37,6 +37,7 @@ public class AdoptantService(ShelterContext context) {
         animal.DataAdopcio = DateTime.UtcNow;
 
         adoptant.Animals.Add(animal);
+        animal.Voluntaris.Clear();
 
         _context.SaveChanges();
 
