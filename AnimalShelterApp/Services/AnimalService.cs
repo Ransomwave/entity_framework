@@ -93,7 +93,7 @@ public class AnimalService(ShelterContext context) {
             return false;
         }
 
-        if (child.DataNaixement <= mother.DataNaixement) {
+        if (child.DataNaixement < mother.DataNaixement) {
             Console.WriteLine($"Child {child.Nom} has birth date {child.DataNaixement}, which is not after mother {mother.Nom}'s birth date {mother.DataNaixement}");
             return false;
         }
@@ -129,5 +129,69 @@ public class AnimalService(ShelterContext context) {
         var descendantList = new List<Animal>();
         GetDescendants(animal, descendantList);
         return descendantList;
+    }
+
+    public void CalcularDespesaMes() {
+        var expenseBySpecies = new Dictionary<Especie, decimal> {
+            [Especie.GOS] = 60,
+            [Especie.GAT] = 40,
+            [Especie.CONILL] = 15,
+            [Especie.AU] = 10,
+            [Especie.ALTRES] = 20,
+        };
+
+        var nonAdoptedAnimals = context.Animals.Where(a => a.EstaAdoptat == false).ToList();
+
+        var totalExpense = 0m;
+
+        Animal? expensiveAnimal = null;
+        var expensiveAnimalPrice = 0m;
+
+        foreach (var animal in nonAdoptedAnimals) {
+            var previousExpense = animal.DespesaAcumulada;
+            var expense = expenseBySpecies[animal.Especie];
+
+            var hasVolunteers = animal.Voluntaris.Count > 0;
+            if (hasVolunteers) {
+                // reduce by 10%
+                expense *= 0.9m;
+            }
+
+            var isEightOrOlder = DateTime.Today.Year - animal.DataNaixement.Year >= 8;
+            if (isEightOrOlder) {
+                // add 30%
+                expense *= 1.3m;
+            }
+
+            var children = 0;
+            // if (animal.Nom == "Nala") {
+            //     Console.WriteLine(string.Join(", ", animal.Cries));
+            // }
+            foreach (var child in animal.Cries) {
+
+                // add 10% for each unadopted child
+                if (child.EstaAdoptat) {
+                    continue;
+                }
+                expense *= 1.1m;
+                children++;
+            }
+
+
+            animal.DespesaAcumulada += expense;
+            totalExpense += expense;
+
+            if (expensiveAnimal == null || expensiveAnimalPrice < expense) {
+                expensiveAnimal = animal;
+                expensiveAnimalPrice = expense;
+            }
+
+            Console.WriteLine($"Animal {animal.Nom}: Previous expense: {previousExpense}, New expense: {expense}, Total accumulated expense: {animal.DespesaAcumulada}\n\tModifiers applied: {(hasVolunteers ? "Has volunteers (-10%)" : "")} {(isEightOrOlder ? "8 years or older (+30%)" : "")} {(children > 0 ? $"Unadopted children: {children} (+10% each)" : "")}");
+        }
+
+        // 3: extra
+        Console.WriteLine($"Total month expense: {totalExpense}\n\tMost expensive animal: {expensiveAnimal} (${expensiveAnimalPrice})");
+
+        context.SaveChanges();
     }
 }

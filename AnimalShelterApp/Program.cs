@@ -257,3 +257,30 @@ animalService.RegistrarCria("724098100000999", criaVella);          // false: no
 // 3
 Console.WriteLine("\n--- Descendents ---");
 Console.WriteLine(string.Join(", ", animalService.Descendants("724098100000011")));
+
+// === PART 5 ===
+Console.WriteLine("=== PART 5 ===");
+
+Console.WriteLine("\n -- 1 --");
+
+// should be double (it is)
+// animalService.CalcularDespesaMes();
+// animalService.CalcularDespesaMes();
+
+Console.WriteLine("\n -- 2 --");
+
+// Animal Nala: Previous expense: 0, New expense: 85.80, Total accumulated expense: 85.80
+animalService.CalcularDespesaMes();
+
+// adopt Coco
+// new adopter to not mess up the code above
+var johnDoe = new Adoptant { DNI = "67676767Z", Nom = "John", Cognoms = "Doe", TeJardi = true };
+ctx.Adoptants.Add(johnDoe);
+ctx.SaveChanges();
+
+Console.WriteLine("-- Coco -> John Doe --");
+
+// Animal Nala: Previous expense: 85.80, New expense: 78.0, Total accumulated expense: 163.80 
+adoptantService.Adoptar("67676767Z", "724098100000012");
+animalService.CalcularDespesaMes();
+

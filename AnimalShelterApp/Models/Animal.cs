@@ -39,12 +39,16 @@ public class Animal {
 
     public virtual HashSet<Animal> Cries { get; set; }
 
+    [Precision(8, 2)]
+    public decimal DespesaAcumulada { get; set; }
+
     public Animal() {
         Voluntaris = [];
         Cries = [];
         DataNaixement = DateTime.UtcNow;
         EstaAdoptat = false;
         QuotaAdopcio = 0;
+        DespesaAcumulada = 0;
     }
 
     public override string ToString() {
