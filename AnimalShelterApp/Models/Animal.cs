@@ -39,12 +39,15 @@ public class Animal {
 
     public virtual HashSet<Animal> Cries { get; set; }
 
+    public virtual HashSet<Visita> Visitas { get; set; }
+
     [Precision(8, 2)]
     public decimal DespesaAcumulada { get; set; }
 
     public Animal() {
         Voluntaris = [];
         Cries = [];
+        Visitas = [];
         DataNaixement = DateTime.UtcNow;
         EstaAdoptat = false;
         QuotaAdopcio = 0;

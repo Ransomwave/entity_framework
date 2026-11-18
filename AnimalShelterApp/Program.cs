@@ -16,6 +16,7 @@ var animals = new List<Animal> {
         Nom = "Bar", Especie = Especie.GOS, EsFemella = true, Pes = 18.2, DataNaixement = new(2020, 7, 4),
         DataEntrada = new(2023, 6, 21), Xip = new() { Codi = "000000000000002" }
     },
+    // BAZ = SENIOR (8+)
     new() {
         Nom = "Baz", Especie = Especie.GOS, EsFemella = false, Pes = 35.0, DataNaixement = new(2017, 11, 30),
         DataEntrada = new(2022, 9, 3), Xip = new() { Codi = "000000000000003" }
@@ -284,3 +285,21 @@ Console.WriteLine("-- Coco -> John Doe --");
 adoptantService.Adoptar("67676767Z", "724098100000012");
 animalService.CalcularDespesaMes();
 
+// === PART 6 ===
+Console.WriteLine("=== PART 6 ===");
+
+var visitaService = new VisitaService(ctx);
+
+Console.WriteLine("\n -- 1 --");
+
+visitaService.GenerarVisites(30);
+visitaService.EstadistiquesPerEspecie();
+
+Console.WriteLine("\n -- 2 --");
+
+visitaService.EstadistiquesPerMotiu();
+visitaService.LlistatVoluntaris(1);
+
+Console.WriteLine("\n -- 3 --");
+
+visitaService.VoluntarisDeSeniors();

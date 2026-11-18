@@ -8,6 +8,7 @@ public class ShelterContext : DbContext {
     public DbSet<Xip> Xips => Set<Xip>();
     public DbSet<Adoptant> Adoptants => Set<Adoptant>();
     public DbSet<Voluntari> Voluntaris => Set<Voluntari>();
+    public DbSet<Visita> Visitas => Set<Visita>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options.UseLazyLoadingProxies().UseSqlite("Data Source=shelter.db");
@@ -40,5 +41,15 @@ public class ShelterContext : DbContext {
         modelBuilder.Entity<Voluntari>()
             .Property(voluntari => voluntari.Torn)
             .HasConversion<string>();
+
+        modelBuilder.Entity<Visita>()
+            .Property(v => v.Motiu)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Visita>()
+            .HasOne(visita => visita.Animal)
+            .WithMany(animal => animal.Visitas)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }
 }
